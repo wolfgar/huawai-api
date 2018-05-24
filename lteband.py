@@ -4,6 +4,7 @@
 #
 
 from huawei_api import HuaweiAPI
+from commonargs import get_huawei_from_args
 import logging
 import argparse
 import sys
@@ -19,27 +20,8 @@ if __name__ == "__main__":
     parser.add_argument("--disable",
                         help="Band number to disable",
                         required=False)
-    parser.add_argument("--user",
-                        help="Username to log in",
-                        default="admin",
-                        required=False)
-    parser.add_argument("--password",
-                        help="password to log in",
-                        required=True)
-    parser.add_argument("--logfile",
-                        help="Filename to save logs",
-                        required=False)
-    parser.add_argument("--loglevel",
-                        help="loglevel",
-                        required=False,
-                        choices=["DEBUG", "INFO", "WARN", "ERROR"],
-                        default="INFO")
-    parser.add_argument("--ip",
-                        help="Modem IP address",
-                        default="192.168.8.1",
-                        required=False)
 
-    args = parser.parse_args()
+    api, args = get_huawei_from_args(parser)
     if not args.enable and not args.disable:
         print "A band to be enabled or disabled has to be set"
         sys.exit(-1)
@@ -48,10 +30,7 @@ if __name__ == "__main__":
     else:
         b = int(args.disable)
 
-    logging.getLogger().setLevel(getattr(logging, args.loglevel))
     log = logging.getLogger("lteband")
-    api = HuaweiAPI(host=args.ip, user=args.user, passwd=args.password,
-                    logfile=args.logfile)
     # Check whether the BAND is supported by the modem
     band_list = api.net_mode_list()
     log.info("The Modem supports the following LTE bands: " +

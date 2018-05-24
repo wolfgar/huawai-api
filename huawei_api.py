@@ -180,9 +180,26 @@ class HuaweiAPI:
         else:
             return self.__api_post('net/net-mode', params)
 
+    def sms_list(self):
+        d = OrderedDict()
+        d['PageIndex'] = 1
+        d['ReadCount'] = 20
+        d['BoxType'] = 1
+        d['SortType'] = 0
+        d['Ascending'] = 0
+        d['UnreadPreferred'] = 0
+        return self.__api_post('sms/sms-list', d)
+
+    def sms_count(self):
+        return self.__api_request('sms/sms-count')
+
+    def sms_delete(self, index):
+        d = OrderedDict()
+        d['Index'] = index
+        return self.__api_post('sms/delete-sms', d)
+
     def net_mode_list(self, params=None):
         if params is None:
             return self.__api_request('net/net-mode-list')
         else:
             return self.__api_post('net/net-mode-list', params)
-
