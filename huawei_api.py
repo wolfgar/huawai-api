@@ -131,7 +131,7 @@ class HuaweiAPI:
         request['request'] = data
         try:
             r = self.session.post(url=self.api_url + api_method_url,
-                                  data=xmltodict.unparse(request, pretty=True),
+                                  data=xmltodict.unparse(request, pretty=True).encode('utf-8'),
                                   headers=headers, timeout=(1.5, 1.5))
         except requests.exceptions.RequestException as e:
             raise HuaweiAPIException("Request %s failed: %s" %
